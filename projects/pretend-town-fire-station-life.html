@@ -1,29 +1,254 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pretend Town Fire Station Life — Waqas Ahmad</title><link rel="icon" type="image/svg+xml" href="../assets/favicon.svg"><link rel="stylesheet" href="../assets/style.css"></head><body><header class="nav"><div class="wrap"><a class="brand" href="../index.html"><span></span> Waqas Ahmad</a><nav><a href="../index.html#work">Work</a><a href="../index.html#experience">Experience</a><a href="../index.html#about">About</a><a href="https://www.linkedin.com/in/waqas-ahmad-unity/" target="_blank" rel="noopener">LinkedIn</a>
-<a href="https://github.com/WaqasAhmad-Personal" target="_blank" rel="noopener">GitHub</a>
-<a href="https://x.com/Waqas_Ahmad0495" target="_blank" rel="noopener">X</a>
-<a class="navbtn" href="../assets/Waqas_Ahmad_Resume.pdf" download>Resume</a></nav></div></header><main><section class="detail-hero"><div class="wrap"><a class="back" href="../index.html#work">← Back to projects</a><div class="detail-grid"><div><div class="eyebrow">PRETEND PLAY</div><h1>Pretend Town Fire Station Life</h1><p class="lead">Kids gear up as firefighters, respond to calls, and explore a fire station’s control room, garage, and rest areas.</p><div class="tagrow"><span>Unity</span><span>C#</span><span>Mobile Games</span></div></div><div class="detail-image project-gallery" data-images='["../assets/projects/pretend-town-fire-station-life/1.png", "../assets/projects/pretend-town-fire-station-life/2.png", "../assets/projects/pretend-town-fire-station-life/3.png", "../assets/projects/pretend-town-fire-station-life/4.png", "../assets/projects/pretend-town-fire-station-life/5.png", "../assets/projects/pretend-town-fire-station-life/7.png", "../assets/images/pretend-town-fire-station-life.svg"]'>
-<img class="gallery-main" data-gallery-main src="../assets/images/pretend-town-fire-station-life.svg" alt="Pretend Town Fire Station Life">
-<div class="gallery-controls"><button data-gallery-prev>‹ Previous</button><span data-gallery-count>1 / 1</span><button data-gallery-next>Next ›</button></div><div class="gallery-thumbs" data-thumbs></div><div class="gallery-note">Project album · screenshots can be added to this project folder.</div></div></div></div></section><section><div class="wrap content"><div><h2>Project Overview</h2><p>Kids gear up as firefighters, respond to calls, and explore a fire station’s control room, garage, and rest areas.</p><p>This project is part of my professional Unity development portfolio. My work has included gameplay systems, interactions, UI flows, performance improvements and production-ready implementation depending on the project scope.</p></div><aside><div class="sidecard"><small>Category</small><strong>Pretend Play</strong><small>Technology</small><strong>Unity · C#</strong><small>External listing</small><a href="https://apkpure.com/pretend-town-fire-station-life/com.mobigamesstudio.pretend.my.fire.station" target="_blank" rel="noopener">Open store / listing ↗</a></div></aside></div></section></main><footer><div class="wrap">© 2026 Waqas Ahmad · Senior Unity Developer</div></footer>
-<script>
-function setupAlbum(root){
-  const imgs=JSON.parse(root.dataset.images||'[]');
-  if(!imgs.length)return;
-  const img=root.querySelector('[data-main]'); const count=root.querySelector('[data-count]'); const dots=root.querySelector('[data-dots]');
-  let i=0;
-  const valid=[];
-  imgs.forEach((src)=>{ const pre=new Image(); pre.onload=()=>{valid.push(src); if(valid.length===1){i=0; render();}}; pre.onerror=()=>{}; pre.src=src; });
-  function render(){ if(!valid.length)return; img.src=valid[i]; count.textContent=(i+1)+' / '+valid.length; dots.innerHTML=valid.map((_,n)=>'<span class="album-dot '+(n===i?'active':'')+'"></span>').join(''); }
-  root.querySelector('[data-prev]').onclick=()=>{if(valid.length){i=(i-1+valid.length)%valid.length;render()}};
-  root.querySelector('[data-next]').onclick=()=>{if(valid.length){i=(i+1)%valid.length;render()}};
-  render();
-}
-function setupGallery(root){
- const imgs=JSON.parse(root.dataset.images||'[]'); const main=root.querySelector('[data-gallery-main]'); const thumbs=root.querySelector('[data-thumbs]'); const count=root.querySelector('[data-gallery-count]'); let valid=[]; let i=0;
- imgs.forEach(src=>{const im=new Image(); im.onload=()=>{valid.push(src); render()}; im.onerror=()=>{}; im.src=src});
- function render(){if(!valid.length)return; if(i>=valid.length)i=0; main.src=valid[i]; count.textContent=(i+1)+' / '+valid.length; thumbs.innerHTML=valid.map((src,n)=>'<img class="gallery-thumb '+(n===i?'active':'')+'" src="'+src+'" data-n="'+n+'">').join(''); thumbs.querySelectorAll('img').forEach(t=>t.onclick=()=>{i=+t.dataset.n;render()});}
- root.querySelector('[data-gallery-prev]').onclick=()=>{if(valid.length){i=(i-1+valid.length)%valid.length;render()}}; root.querySelector('[data-gallery-next]').onclick=()=>{if(valid.length){i=(i+1)%valid.length;render()}};
- render();
-}
-document.querySelectorAll('.project-album').forEach(setupAlbum); document.querySelectorAll('.project-gallery').forEach(setupGallery);
-</script>
-</body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pretend Town Fire Station Life — Technical Architecture Case Study | Waqas Ahmad</title>
+  <meta name="description" content="Detailed Unity engineering case study for Pretend Town Fire Station Life. C# design patterns, 60 FPS mobile performance profiling, and memory management by Waqas Ahmad.">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+
+  <meta property="og:title" content="Pretend Town Fire Station Life — Technical Architecture Case Study | Waqas Ahmad">
+  <meta property="og:description" content="Detailed Unity engineering case study for Pretend Town Fire Station Life. C# design patterns, 60 FPS mobile performance profiling, and memory management by Waqas Ahmad.">
+  <meta property="og:image" content="../projects/pretend-town-fire-station-life/1.png">
+
+  <link rel="stylesheet" href="../assets/style.css">
+  <style>
+    .case-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 50px 20px 80px;
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--accent-emerald);
+      text-decoration: none;
+      margin-bottom: 24px;
+    }
+    .case-title {
+      font-size: 2.25rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+    .case-badge {
+      display: inline-block;
+      font-family: monospace;
+      font-size: 0.75rem;
+      color: var(--accent-emerald);
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      padding: 3px 8px;
+      border-radius: 4px;
+      margin-bottom: 16px;
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin: 28px 0 40px;
+    }
+    .gallery-img {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background: #020617;
+    }
+    .case-block {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .case-block-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .code-box {
+      background: #020617;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 18px;
+      overflow-x: auto;
+      font-family: monospace;
+      font-size: 0.8rem;
+      color: #cbd5e1;
+      line-height: 1.6;
+    }
+    .metrics-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin: 20px 0 32px;
+    }
+    @media (max-width: 768px) {
+      .metrics-bar {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .case-title {
+        font-size: 1.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Minimal Header -->
+  <header class="nav-header">
+    <div class="wrap nav-container">
+      <a class="brand-link" href="../index.html">
+        <span>← Back to Portfolio</span>
+      </a>
+      <div class="nav-actions">
+        <a href="../assets/Waqas_Ahmad_Resume.pdf" class="btn-secondary" download>Download CV</a>
+        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=waqas.ahmad0495@gmail.com?subject=Pretend%20Town%20Fire%20Station%20Life" class="btn-primary">Contact Waqas</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="case-container">
+    <a href="../index.html#work" class="back-btn">← All Projects</a>
+    
+    <div class="case-badge">Pretend Play · Kids Roleplay & Open World Sim</div>
+    <h1 class="case-title">Pretend Town Fire Station Life</h1>
+    <p style="font-size: 1.05rem; color: var(--text-muted); line-height: 1.6;">
+      Interactive fire station roleplay — gear up as firefighters, slide down the pole, drive the fire engine, and extinguish blaze emergencies.
+    </p>
+
+    <!-- Metrics Strip -->
+    <div class="metrics-bar">
+      <div class="stat-box">
+        <div class="stat-num">60 FPS</div>
+        <div class="stat-label">Profiler Target</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">< 120MB</div>
+        <div class="stat-label">Memory Budget</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" style="font-size: 1rem; color: var(--accent-cyan);">Unity 2020.3 LTS</div>
+        <div class="stat-label">Engine Version</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" style="font-size: 0.95rem; color: #a78bfa;">Mobile Release</div>
+        <div class="stat-label">Deployment Scope</div>
+      </div>
+    </div>
+
+    <!-- Screenshot Gallery -->
+    <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 12px;">In-Game Screenshots</h2>
+    <div class="gallery-grid">
+      
+        <img src="../projects/pretend-town-fire-station-life/1.png" alt="Pretend Town Fire Station Life Screenshot 1" class="gallery-img" loading="lazy" onerror="this.src='../assets/favicon.svg'">
+      
+
+        <img src="../projects/pretend-town-fire-station-life/2.png" alt="Pretend Town Fire Station Life Screenshot 2" class="gallery-img" loading="lazy" onerror="this.src='../assets/favicon.svg'">
+      
+
+        <img src="../projects/pretend-town-fire-station-life/3.png" alt="Pretend Town Fire Station Life Screenshot 3" class="gallery-img" loading="lazy" onerror="this.src='../assets/favicon.svg'">
+      
+
+        <img src="../projects/pretend-town-fire-station-life/4.png" alt="Pretend Town Fire Station Life Screenshot 4" class="gallery-img" loading="lazy" onerror="this.src='../assets/favicon.svg'">
+      
+
+        <img src="../projects/pretend-town-fire-station-life/5.png" alt="Pretend Town Fire Station Life Screenshot 5" class="gallery-img" loading="lazy" onerror="this.src='../assets/favicon.svg'">
+      
+    </div>
+
+    <!-- Technical Challenge (Replaces Generic Boilerplate) -->
+    <div class="case-block">
+      <h2 class="case-block-title">
+        <span style="color: #f59e0b;">⚡</span> Technical & Production Challenge
+      </h2>
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+        Allowing kids to pick up, drop, and combine dozens of props across rooms without breaking Z-sorting.
+      </p>
+    </div>
+
+    <!-- Architecture & C# Patterns -->
+    <div class="case-block">
+      <h2 class="case-block-title">
+        <span style="color: var(--accent-cyan);">🧩</span> Core C# Architecture & Patterns
+      </h2>
+      <ul style="list-style: square inside; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 16px; display:flex; flex-direction:column; gap:6px;">
+        <li><strong>Observer Pattern (Room Transitions)</strong></li>
+<li><strong>Component-Based Item Interactions</strong></li>
+      </ul>
+      <h3 style="font-size: 0.85rem; font-family: monospace; color: var(--accent-emerald); margin-bottom: 8px;">
+        Production C# Implementation Pattern
+      </h3>
+      <pre class="code-box"><code>// Modular Item Pick-and-Place with Dynamic Depth Layering
+public class InteractiveProp : MonoBehaviour {
+    private SpriteRenderer _renderer;
+    private int _originalSortOrder;
+
+    private void Awake() {
+        _renderer = GetComponent&lt;SpriteRenderer&gt;();
+        _originalSortOrder = _renderer.sortingOrder;
+    }
+
+    public void OnPickup() =&gt; _renderer.sortingOrder = 999; // Float to top while dragging
+    public void OnDrop(Transform slot) {
+        transform.position = slot ? slot.position : transform.position;
+        _renderer.sortingOrder = _originalSortOrder;
+    }
+}</code></pre>
+    </div>
+
+    <!-- Profiling & Memory Optimization -->
+    <div class="case-block">
+      <h2 class="case-block-title">
+        <span style="color: #818cf8;">🚀</span> Profiling & Hardware Optimization
+      </h2>
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 14px;">
+        Implemented dynamic SortingGroup hierarchy updating during drag-and-drop operations.
+      </p>
+      <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-main); margin-bottom: 6px;">
+        Senior Engineering Highlights:
+      </div>
+      <ul style="list-style: disc inside; font-size: 0.85rem; color: var(--text-muted); display:flex; flex-direction:column; gap:6px;">
+        <li>Interactive character wardrobe system swapping turnout coats, helmets, and oxygen tanks on touch.</li>
+<li>Water hose mechanic extinguishing fire sprite particles with collider-based moisture detection.</li>
+<li>Multi-room camera panning with smooth horizontal bounds clamping.</li>
+      </ul>
+    </div>
+
+    <!-- Tech Stack Chips -->
+    <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+      <div style="display:flex; gap:6px; flex-wrap:wrap;">
+        <span class="spec-chip">Unity 2D</span>
+<span class="spec-chip">C#</span>
+<span class="spec-chip">Multi-Room Navigation</span>
+<span class="spec-chip">Interactive Props</span>
+<span class="spec-chip">Water Hose Particle</span>
+      </div>
+      <div style="width:100%; margin-top:12px; display:flex; justify-content:flex-end;"><a href="https://apkpure.com/pretend-town-fire-station-life/com.mobigamesstudio.pretend.my.fire.station" target="_blank" rel="noopener" class="btn-secondary">External listing ↗</a></div>
+      <div style="display:flex; gap:12px;">
+        <a href="../index.html#work" class="btn-secondary">← Back to All Projects</a>
+        
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p class="footer-copy">
+        © 2026 Waqas Ahmad · Senior Unity Developer
+      </p>
+    </div>
+  </footer>
+
+  <script src="../assets/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+Visible projects: 19
+Category counts:
+- Metaverse: 1
+- Casual: 5
+- Pretend Play: 6
+- Hyper Casual: 7
+
+- projects/crazy-burger-chef-cooking-game.html
+- projects/ice-cream-maker-frenzy-dessert.html
+- projects/super-market-shopping-games.html
+- projects/asmr-makeup-salon-spa-games.html
+- projects/fancy-cake-maker-cooking-game.html
+- projects/pop-it-chocolate-cake-maker.html
+- projects/chibi-fashion-dress-up-games.html
+- projects/model-girl-fashion-3d-dress-up.html
+- projects/eye-art-salon-makeup-challenge.html
+- projects/nail-salon-game-nail-art-games.html
+- projects/baby-care-babysitter-games.html
+- projects/juice-maker-3d-smoothie-games.html
+- projects/toon-town-hospital.html
+- projects/toon-town-airport.html
+- projects/toon-town-daycare.html
+- projects/toon-town-shopping.html
+- projects/my-mini-town-ice-princess-game.html
+- projects/mini-town-princess-land.html
+- projects/mini-town-neighborhood.html
+- projects/mini-town-pet-home.html
+- projects/mt-iceland-snow-games-for-kids.html
+- projects/mt-summer-fun-park-games.html
+- projects/my-pretend-town-farm-animal.html
+- projects/difference-game-find-and-spot.html

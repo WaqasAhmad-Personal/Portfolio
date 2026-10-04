@@ -1,0 +1,43 @@
+V12 Screenshot-Only Update Test Report
+
+Purpose: Hide every project that has no screenshots and update all displayed project counts.
+
+Visible project count: 19
+Category counts:
+- Metaverse: 1
+- Casual: 5
+- Pretend Play: 6
+- Hyper Casual: 7
+
+Removed from portfolio navigation/listing and deleted their project HTML pages:
+- Crazy Burger Chef Cooking Game
+- Ice Cream Maker Frenzy Dessert
+- Super Market Shopping Games
+- ASMR Makeup Salon: Spa Games
+- Fancy Cake Maker: Cooking Game
+- Pop it Chocolate Cake Maker
+- Chibi Fashion: Dress Up Games
+- Model Girl Fashion 3D Dress Up
+- Eye Art Salon Makeup Challenge
+- Nail Salon Game Nail Art Games
+- Baby care: Babysitter games
+- Juice Maker 3D Smoothie Games
+- Toon Town: Hospital
+- Toon Town - Airport
+- Toon Town: Daycare
+- Toon Town: Shopping
+- My Mini Town-Ice Princess Game
+- Mini Town: Princess Land
+- Mini Town : Neighborhood
+- Mini Town: Pet Home
+- MT-Iceland Snow Games for Kids
+- MT: Summer Fun Park Games
+- My Pretend Town Farm Animal
+- Difference Game: Find and Spot
+
+Automated checks:
+- No remaining 'No screenshots' project cards: PASS
+- No remaining project HTML pages for removed projects: PASS
+- Home page project cards: 19
+- Home page category counts sum to 19: PASS
+- All remaining home-page screenshot references exist: checked below
