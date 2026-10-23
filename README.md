@@ -9,7 +9,9 @@ index.html                     Home page: hero, skills, selected work, experienc
 projects/<slug>.html           One page per project (22): gallery, overview, role, video, store link
 assets/style.css               All styles
 assets/app.js                  Albums and galleries, video cards, motion effects, page transitions
-assets/projects/<slug>/*.webp  Project screenshots
+assets/projects/<slug>/*.webp  Project screenshots (full size, used on the project pages)
+assets/projects/<slug>/card/   Small copies (800px wide) used by the home-page cards
+tools/make-card-thumbs.py      Rebuilds those small copies
 assets/images/<slug>.svg       Cover shown until the screenshots load
 assets/og/<slug>.jpg           1200×630 link-preview images (og:image / twitter:image)
 assets/Waqas_Ahmad_Resume.pdf  Downloadable CV
@@ -18,9 +20,18 @@ assets/Waqas_Ahmad_Resume.pdf  Downloadable CV
 ## Adding or changing screenshots
 
 1. Put the images in `assets/projects/<slug>/` as WebP (about 1600px wide, under ~500 KB each).
-2. List them in the `data-images` attribute of the project's card in `index.html` **and** of the gallery in `projects/<slug>.html`, in display order, with the SVG cover last.
+2. List them in the `data-images` attribute of the project's card in `index.html` **and** of the gallery in `projects/<slug>.html`, in display order, with the SVG cover last. Always list the full-size file; the cards pick up the small copy themselves.
+3. Rebuild the card copies (needs Python with Pillow: `pip install pillow`):
+
+   ```bash
+   python tools/make-card-thumbs.py
+   ```
+
+   It only rebuilds copies whose screenshot changed, and deletes copies of screenshots you removed. If you skip this step the card still works, it just loads the full-size image.
 
 Only images that actually load are shown, so a missing file never shows as a broken image, but keep the lists in sync with the folder.
+
+The home page loads lazily: each card fetches its first screenshot as it scrolls into view, and the rest only when the visitor uses the arrows (or hovers over the card).
 
 ## Running locally
 

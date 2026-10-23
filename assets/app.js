@@ -36,6 +36,21 @@ function parseImages(root) {
   try { return JSON.parse(root.dataset.images || '[]'); } catch (e) { return []; }
 }
 
+// Home-page cards show the small copies in <slug>/card/ (made by tools/make-card-thumbs.py),
+// falling back to the full screenshot if a copy is missing.
+const cardSrc = src => src.replace(/\/([^/]+\.webp)$/i, '/card/$1');
+
+// Calls done with the first source that loads, or null when none do.
+function firstLoadable(srcs, done) {
+  if (!srcs.length) { done(null); return; }
+  const im = new Image();
+  im.onload = () => done(srcs[0]);
+  im.onerror = () => firstLoadable(srcs.slice(1), done);
+  im.src = srcs[0];
+}
+
+// Albums load lazily: the first image when the card nears the screen, the others only when
+// the visitor heads for them. An image that fails to load is dropped from the album.
 function setupAlbum(root) {
   const img = root.querySelector('[data-main]');
   const count = root.querySelector('[data-count]');
@@ -43,26 +58,49 @@ function setupAlbum(root) {
   const prev = root.querySelector('[data-prev]');
   const next = root.querySelector('[data-next]');
   const nav = root.querySelector('.album-nav');
-  let valid = [], i = 0;
+  const list = [...new Set(parseImages(root).filter(s => !/\.svg$/i.test(s)))];
+  const urls = new Map();
+  let i = 0, started = false, engaged = false;
 
-  function render() {
-    if (!valid.length) return;
-    swapSrc(img, valid[i]);
-    count.textContent = (i + 1) + ' / ' + valid.length;
-    dots.innerHTML = valid.map((_, n) => '<span class="album-dot ' + (n === i ? 'active' : '') + '" aria-hidden="true"></span>').join('');
+  function resolve(src, done) {
+    if (urls.has(src)) { done(urls.get(src)); return; }
+    firstLoadable([cardSrc(src), src], url => { urls.set(src, url); done(url); });
   }
+  function show(n, d) {
+    if (nav) nav.hidden = list.length < 2;
+    if (!list.length) return;
+    i = (n + list.length) % list.length;
+    const src = list[i];
+    resolve(src, url => {
+      if (list[i] !== src) return; // the visitor has already moved on
+      if (!url) { list.splice(i, 1); show(d < 0 ? i - 1 : i, d); return; }
+      swapSrc(img, url);
+      count.textContent = (i + 1) + ' / ' + list.length;
+      dots.innerHTML = list.map((_, k) => '<span class="album-dot ' + (k === i ? 'active' : '') + '" aria-hidden="true"></span>').join('');
+      warmNext(d);
+    });
+  }
+  // Once the visitor shows interest in a card, preload the image the arrows lead to next.
+  function warmNext(d) {
+    if (engaged && list.length > 1) resolve(list[(i + d + list.length) % list.length], () => {});
+  }
+  function start() { if (!started) { started = true; show(0, 1); } }
   function step(d, e) {
     e.preventDefault(); e.stopPropagation();
-    if (valid.length) { i = (i + d + valid.length) % valid.length; render(); }
+    engaged = true;
+    start();
+    if (list.length) show(i + d, d);
   }
   prev.onclick = e => step(-1, e);
   next.onclick = e => step(1, e);
+  root.addEventListener('pointerenter', () => { if (!engaged) { engaged = true; start(); warmNext(1); } });
   if (nav) nav.hidden = true;
-  loadValid(parseImages(root), list => {
-    valid = list;
-    if (nav) nav.hidden = valid.length < 2;
-    render();
-  });
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(entries => {
+      if (entries.some(en => en.isIntersecting)) { io.disconnect(); start(); }
+    }, { rootMargin: '300px 0px' });
+    io.observe(root);
+  } else start();
 }
 
 function setupGallery(root) {
