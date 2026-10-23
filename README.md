@@ -12,6 +12,7 @@ assets/app.js                  Albums and galleries, video cards, motion effects
 assets/projects/<slug>/*.webp  Project screenshots (full size, used on the project pages)
 assets/projects/<slug>/card/   Small copies (800px wide) used by the home-page cards
 tools/make-card-thumbs.py      Rebuilds those small copies
+tools/update-project-pager.py  Rewrites the Previous / Next project links on every project page
 assets/images/<slug>.svg       Cover shown until the screenshots load
 assets/og/<slug>.jpg           1200×630 link-preview images (og:image / twitter:image)
 assets/Waqas_Ahmad_Resume.pdf  Downloadable CV
@@ -32,6 +33,16 @@ assets/Waqas_Ahmad_Resume.pdf  Downloadable CV
 Only images that actually load are shown, so a missing file never shows as a broken image, but keep the lists in sync with the folder.
 
 The home page loads lazily: each card fetches its first screenshot as it scrolls into view, and the rest only when the visitor uses the arrows (or hovers over the card).
+
+## Adding, removing or reordering projects
+
+The category tabs above the cards are built automatically from each card's category label (the `<small>` text), so a new category gets its own tab with no extra work.
+
+The Previous / Next links at the bottom of each project page follow the order of the cards in `index.html`. After changing that order, or adding or removing a project page, run:
+
+```bash
+python tools/update-project-pager.py
+```
 
 ## Running locally
 

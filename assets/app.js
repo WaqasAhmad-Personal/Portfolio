@@ -36,6 +36,23 @@ function parseImages(root) {
   try { return JSON.parse(root.dataset.images || '[]'); } catch (e) { return []; }
 }
 
+// Tall (phone-shaped) screenshots sit on a blurred copy of themselves instead of empty bars.
+function fitTall(img) {
+  const box = img.parentElement;
+  const back = document.createElement('div');
+  back.className = 'img-backdrop';
+  back.setAttribute('aria-hidden', 'true');
+  back.appendChild(document.createElement('span'));
+  box.insertBefore(back, img);
+  const update = () => {
+    const tall = img.naturalWidth > 0 && img.naturalWidth / img.naturalHeight < 1.2;
+    box.classList.toggle('tall', tall);
+    if (tall) back.firstChild.style.backgroundImage = 'url("' + img.currentSrc + '")';
+  };
+  img.addEventListener('load', update);
+  if (img.complete) update();
+}
+
 // Home-page cards show the small copies in <slug>/card/ (made by tools/make-card-thumbs.py),
 // falling back to the full screenshot if a copy is missing.
 const cardSrc = src => src.replace(/\/([^/]+\.webp)$/i, '/card/$1');
@@ -61,6 +78,7 @@ function setupAlbum(root) {
   const list = [...new Set(parseImages(root).filter(s => !/\.svg$/i.test(s)))];
   const urls = new Map();
   let i = 0, started = false, engaged = false;
+  fitTall(img);
 
   function resolve(src, done) {
     if (urls.has(src)) { done(urls.get(src)); return; }
@@ -110,6 +128,7 @@ function setupGallery(root) {
   const controls = root.querySelector('.gallery-controls');
   const title = main.alt || 'Project';
   let valid = [], i = 0;
+  fitTall(main);
 
   function render() {
     if (!valid.length) return;
@@ -135,6 +154,34 @@ function setupGallery(root) {
 
 document.querySelectorAll('.project-album').forEach(setupAlbum);
 document.querySelectorAll('.project-gallery').forEach(setupGallery);
+
+// Category tabs above the project cards, built from each card's category label.
+// The chosen tab is remembered for the visit, so coming back from a project page keeps it.
+const filterBar = document.querySelector('[data-filters]');
+if (filterBar) {
+  const cards = [...document.querySelectorAll('.projects .project')];
+  const catOf = card => card.querySelector('.project-body small').textContent.trim().toLowerCase();
+  const label = cat => cat.replace(/(^|[\s-])\w/g, ch => ch.toUpperCase());
+  const counts = new Map();
+  cards.forEach(card => counts.set(catOf(card), (counts.get(catOf(card)) || 0) + 1));
+  const tabs = [['all', 'All', cards.length], ...[...counts].map(([cat, n]) => [cat, label(cat), n])];
+  filterBar.innerHTML = tabs.map(([cat, name, n]) =>
+    '<button type="button" data-cat="' + cat + '" aria-pressed="false">' + name + '<span>' + n + '</span></button>').join('');
+
+  const choose = (cat, clicked) => {
+    if (!tabs.some(t => t[0] === cat)) cat = 'all';
+    filterBar.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.cat === cat));
+    cards.forEach(card => {
+      card.hidden = cat !== 'all' && catOf(card) !== cat;
+      if (clicked && !card.hidden) card.classList.add('in'); // cards shown by a tab skip the scroll-in animation
+    });
+    try { sessionStorage.setItem('projectFilter', cat); } catch (e) {}
+  };
+  filterBar.addEventListener('click', e => { const b = e.target.closest('button'); if (b) choose(b.dataset.cat, true); });
+  let saved = 'all';
+  try { saved = sessionStorage.getItem('projectFilter') || 'all'; } catch (e) {}
+  choose(saved);
+}
 
 document.querySelectorAll('.video-card[data-yt]').forEach(card => {
   const url = 'https://www.youtube.com/watch?v=' + card.dataset.yt + '&t=' + (card.dataset.start || 0) + 's';
@@ -177,7 +224,7 @@ if (navBar && menuBtn) {
   if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
   document.documentElement.classList.add('js');
 
-  const targets = document.querySelectorAll('.project, .job, .skill-bar, .stat, #work .section-head, #experience .section-head');
+  const targets = document.querySelectorAll('.project, .job, .skill-group, .stat, #work .section-head, #experience .section-head');
   const stagger = new Map();
   targets.forEach(el => {
     const group = el.parentElement;
