@@ -1,12 +1,8 @@
 PROJECT SCREENSHOT ALBUMS
 
-Add screenshots to each project folder using these names:
-01.jpg, 02.jpg, 03.jpg, 04.jpg, 05.jpg, 06.jpg (homepage album)
-01.jpg through 08.jpg are supported on the project detail page.
+Each project has a folder: assets/projects/<project-slug>/ with numbered screenshots (1.webp, 2.webp, ...).
 
-Example:
-assets/projects/flappy-tap-shots/01.jpg
-assets/projects/flappy-tap-shots/02.jpg
-...
+To add or change screenshots, list the file paths in the data-images attribute of that project's card in index.html and of its page in projects/<project-slug>.html.
+Both the home-page cards and the project pages (assets/app.js) only show images that actually load, in the listed order. The SVG in assets/images is used as the cover until photos load.
 
-The website automatically detects available images. Missing images are ignored and the existing project cover remains as a fallback.
+Tip: keep screenshots under ~500 KB each (resize to ~1600px wide, save as JPG/WebP).
