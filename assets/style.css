@@ -168,6 +168,10 @@ img.swapping{opacity:0}
 .filters button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#17130a;font-weight:600}
 .filters button span{opacity:.6;margin-left:5px}
 .project[hidden]{display:none}
+.show-more-wrap{display:flex;justify-content:center;margin-top:28px}
+.show-more-wrap[hidden]{display:none}
+.show-more{background:transparent;color:var(--text);font:600 .95rem Inter,sans-serif;cursor:pointer;transition:.2s}
+.show-more:hover{border-color:var(--accent);color:var(--accent)}
 /* Tall (phone-shaped) screenshots sit on a blurred copy of themselves */
 .project-gallery{position:relative}
 .project-media img,.gallery-main{position:relative}

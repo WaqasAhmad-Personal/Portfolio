@@ -157,9 +157,21 @@ document.querySelectorAll('.project-gallery').forEach(setupGallery);
 
 // Category tabs above the project cards, built from each card's category label.
 // The chosen tab is remembered for the visit, so coming back from a project page keeps it.
+// Only the first few cards of a tab show until the visitor asks for the rest (also remembered).
 const filterBar = document.querySelector('[data-filters]');
 if (filterBar) {
-  const cards = [...document.querySelectorAll('.projects .project')];
+  const SHOWN = 6; // two full rows at 3, 2 or 1 columns
+  const grid = document.querySelector('.projects');
+  const cards = [...grid.querySelectorAll('.project')];
+  const moreBtn = document.createElement('button');
+  moreBtn.type = 'button';
+  moreBtn.className = 'btn show-more';
+  const moreWrap = document.createElement('div');
+  moreWrap.className = 'show-more-wrap';
+  moreWrap.appendChild(moreBtn);
+  grid.after(moreWrap);
+  let current = 'all', expanded = false;
+  try { expanded = sessionStorage.getItem('projectsExpanded') === '1'; } catch (e) {}
   const catOf = card => card.querySelector('.project-body small').textContent.trim().toLowerCase();
   const label = cat => cat.replace(/(^|[\s-])\w/g, ch => ch.toUpperCase());
   const counts = new Map();
@@ -170,14 +182,26 @@ if (filterBar) {
 
   const choose = (cat, clicked) => {
     if (!tabs.some(t => t[0] === cat)) cat = 'all';
+    current = cat;
     filterBar.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.cat === cat));
+    const matching = cards.filter(card => cat === 'all' || catOf(card) === cat);
     cards.forEach(card => {
-      card.hidden = cat !== 'all' && catOf(card) !== cat;
-      if (clicked && !card.hidden) card.classList.add('in'); // cards shown by a tab skip the scroll-in animation
+      card.hidden = !matching.includes(card) || (!expanded && matching.indexOf(card) >= SHOWN);
+      if (clicked && !card.hidden) card.classList.add('in'); // cards shown by a tab or button skip the scroll-in animation
     });
+    moreWrap.hidden = matching.length <= SHOWN;
+    moreBtn.textContent = expanded ? 'Show less' : 'Show more (' + (matching.length - SHOWN) + ')';
+    moreBtn.setAttribute('aria-expanded', expanded);
     try { sessionStorage.setItem('projectFilter', cat); } catch (e) {}
   };
   filterBar.addEventListener('click', e => { const b = e.target.closest('button'); if (b) choose(b.dataset.cat, true); });
+  moreBtn.addEventListener('click', () => {
+    expanded = !expanded;
+    try { sessionStorage.setItem('projectsExpanded', expanded ? '1' : '0'); } catch (e) {}
+    choose(current, true);
+    // After collapsing, bring the visitor back to the cards instead of leaving them far below
+    if (!expanded) grid.closest('section').scrollIntoView({ behavior: MOTION_OK ? 'smooth' : 'auto' });
+  });
   let saved = 'all';
   try { saved = sessionStorage.getItem('projectFilter') || 'all'; } catch (e) {}
   choose(saved);
