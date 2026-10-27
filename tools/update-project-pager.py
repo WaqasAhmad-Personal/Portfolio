@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parent.parent
 PAGER = re.compile(r'<section class="project-pager">.*?</section>', re.S)
 
 home = (ROOT / 'index.html').read_text(encoding='utf-8')
-slugs = re.findall(r'<a class="project" href="projects/([^"]+)\.html"', home)
+slugs = re.findall(r'<a class="card-link" href="projects/([^"]+)\.html"', home)
 
 def title(slug):
     page = (ROOT / 'projects' / f'{slug}.html').read_text(encoding='utf-8')

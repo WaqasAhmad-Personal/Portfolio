@@ -111,7 +111,8 @@ function setupAlbum(root) {
   }
   prev.onclick = e => step(-1, e);
   next.onclick = e => step(1, e);
-  root.addEventListener('pointerenter', () => { if (!engaged) { engaged = true; start(); warmNext(1); } });
+  // The card's title link covers the image, so listen on the whole card.
+  (root.closest('.project') || root).addEventListener('pointerenter', () => { if (!engaged) { engaged = true; start(); warmNext(1); } });
   if (nav) nav.hidden = true;
   if ('IntersectionObserver' in window) {
     const io = new IntersectionObserver(entries => {
@@ -134,10 +135,12 @@ function setupGallery(root) {
     if (!valid.length) return;
     swapSrc(main, valid[i]);
     count.textContent = (i + 1) + ' / ' + valid.length;
+    // Thumbnails use the small card copies, falling back to the full screenshot.
     thumbs.innerHTML = valid.map((src, n) =>
-      '<img class="gallery-thumb ' + (n === i ? 'active' : '') + '" src="' + src + '" data-n="' + n +
+      '<img class="gallery-thumb ' + (n === i ? 'active' : '') + '" src="' + cardSrc(src) + '" data-n="' + n +
       '" alt="' + title + ' screenshot ' + (n + 1) + '" tabindex="0" role="button" loading="lazy">').join('');
     thumbs.querySelectorAll('img').forEach(t => {
+      t.onerror = () => { t.onerror = null; t.src = valid[+t.dataset.n]; };
       const go = () => { i = +t.dataset.n; render(); };
       t.onclick = go;
       t.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } };
@@ -220,7 +223,8 @@ document.querySelectorAll('.video-card[data-yt]').forEach(card => {
 });
 
 // mailto: does nothing on computers without a desktop mail app, so open Gmail compose instead.
-document.querySelectorAll('a[href^="mailto:"]').forEach(a => {
+// Phones and tablets keep mailto:, which opens their mail app.
+if (matchMedia('(hover: hover) and (pointer: fine)').matches) document.querySelectorAll('a[href^="mailto:"]').forEach(a => {
   a.addEventListener('click', e => {
     e.preventDefault();
     const to = a.getAttribute('href').slice(7);

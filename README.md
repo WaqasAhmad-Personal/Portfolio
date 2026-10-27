@@ -16,6 +16,8 @@ tools/update-project-pager.py  Rewrites the Previous / Next project links on eve
 assets/images/<slug>.svg       Cover shown until the screenshots load
 assets/og/<slug>.jpg           1200×630 link-preview images (og:image / twitter:image)
 assets/Waqas_Ahmad_Resume.pdf  Downloadable CV
+404.html                       Shown by GitHub Pages for missing pages
+sitemap.xml, robots.txt        Search-engine files (add new project pages to sitemap.xml)
 ```
 
 ## Adding or changing screenshots
